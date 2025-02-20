@@ -10,33 +10,35 @@ import { Location } from '@angular/common';
   selector: 'app-hero-detail',
   imports: [CommonModule, FormsModule],
   templateUrl: './hero-detail.component.html',
-  styleUrl: './hero-detail.component.css'
+  styleUrl: './hero-detail.component.css',
 })
-export class HeroDetailComponent implements OnInit{
-  hero? : Hero
+export class HeroDetailComponent implements OnInit {
+  hero?: Hero;
 
-  route = inject(ActivatedRoute)
-  heroSErvice = inject(HeroService)
-  location = inject(Location)
+  route = inject(ActivatedRoute);
+  heroSErvice = inject(HeroService);
+  location = inject(Location);
 
   ngOnInit(): void {
-    this.getHero()
+    this.getHero();
   }
 
-  getHero(){
-    const id = Number(this.route.snapshot.paramMap.get(`id`))
+  getHero() {
+    const id = Number(this.route.snapshot.paramMap.get(`id`));
     this.heroSErvice.getHero(id).subscribe({
-      next: response => this.hero = response
-
-      }
-    )
+      next: (response) => (this.hero = response),
+    });
   }
 
-  goBack() : void{
+  goBack(): void {
     this.location.back();
   }
 
-  selectedHero? : Hero
-
-
+  save(): void {
+    if (this.hero){
+      this.heroSErvice.updateHero(this.hero).subscribe({
+        next : response => this.goBack()
+      })
+    }
+  }
 }
